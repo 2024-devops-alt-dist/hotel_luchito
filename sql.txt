@@ -1,0 +1,130 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema hotel_lune
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema hotel_lune
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `hotel_lune` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `hotel_lune` ;
+
+-- -----------------------------------------------------
+-- Table `hotel_lune`.`USERS`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hotel_lune`.`USERS` (
+  `id_user` INT NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(255) NULL,
+  `prenom` VARCHAR(255) NULL,
+  `rol` VARCHAR(45) NULL,
+  `email` VARCHAR(255) NULL,
+  `mot_de_passe` VARCHAR(255) NULL,
+  PRIMARY KEY (`id_user`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hotel_lune`.`ETABLISSEMENTS`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hotel_lune`.`ETABLISSEMENTS` (
+  `id_etablissement` INT NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(255) NULL,
+  `adresse` VARCHAR(255) NULL,
+  `ville` VARCHAR(255) NULL,
+  `description` VARCHAR(255) NULL,
+  `USERS_id_user` INT NOT NULL,
+  PRIMARY KEY (`id_etablissement`),
+  INDEX `fk_ETABLISSEMENTS_USERS1_idx` (`USERS_id_user` ASC) VISIBLE,
+  CONSTRAINT `fk_ETABLISSEMENTS_USERS1`
+    FOREIGN KEY (`USERS_id_user`)
+    REFERENCES `hotel_lune`.`USERS` (`id_user`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hotel_lune`.`SUITES`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hotel_lune`.`SUITES` (
+  `id_suite` INT NOT NULL AUTO_INCREMENT,
+  `nom` VARCHAR(255) NULL,
+  `img` VARCHAR(255) NULL,
+  `description` VARCHAR(255) NULL,
+  `prix` DECIMAL(10,2) NULL,
+  `img_galery` JSON NULL,
+  `id_etablissement` INT NOT NULL,
+  PRIMARY KEY (`id_suite`),
+  INDEX `fk_SUITES_ETABLISSEMENTS_idx` (`id_etablissement` ASC) VISIBLE,
+  CONSTRAINT `fk_SUITES_ETABLISSEMENTS`
+    FOREIGN KEY (`id_etablissement`)
+    REFERENCES `hotel_lune`.`ETABLISSEMENTS` (`id_etablissement`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hotel_lune`.`CONTACTS`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hotel_lune`.`CONTACTS` (
+  `id_contact` INT NOT NULL,
+  `sujet` VARCHAR(255) NULL,
+  `message` LONGTEXT NOT NULL,
+  `email` VARCHAR(255) NULL,
+  `date_contact` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `id_user` INT NOT NULL,
+  `id_etablissement` INT NOT NULL,
+  PRIMARY KEY (`id_contact`),
+  INDEX `fk_CONTACTS_USERS1_idx` (`id_user` ASC) VISIBLE,
+  INDEX `fk_CONTACTS_ETABLISSEMENTS1_idx` (`id_etablissement` ASC) VISIBLE,
+  CONSTRAINT `fk_CONTACTS_USERS1`
+    FOREIGN KEY (`id_user`)
+    REFERENCES `hotel_lune`.`USERS` (`id_user`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_CONTACTS_ETABLISSEMENTS1`
+    FOREIGN KEY (`id_etablissement`)
+    REFERENCES `hotel_lune`.`ETABLISSEMENTS` (`id_etablissement`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hotel_lune`.`RESERVATIONS`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `hotel_lune`.`RESERVATIONS` (
+  `USERS_id_user` INT NOT NULL,
+  `SUITES_id_suite` INT NOT NULL,
+  `date_debut` DATE NULL,
+  `date_fin` DATE NULL,
+  `statut` ENUM('confirmée', 'anulée') NULL,
+  `date_creation` DATE NULL,
+  PRIMARY KEY (`USERS_id_user`, `SUITES_id_suite`),
+  INDEX `fk_USERS_has_SUITES_SUITES1_idx` (`SUITES_id_suite` ASC) VISIBLE,
+  INDEX `fk_USERS_has_SUITES_USERS1_idx` (`USERS_id_user` ASC) VISIBLE,
+  CONSTRAINT `fk_USERS_has_SUITES_USERS1`
+    FOREIGN KEY (`USERS_id_user`)
+    REFERENCES `hotel_lune`.`USERS` (`id_user`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_USERS_has_SUITES_SUITES1`
+    FOREIGN KEY (`SUITES_id_suite`)
+    REFERENCES `hotel_lune`.`SUITES` (`id_suite`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
