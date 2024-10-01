@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function getHotels() {
   try {
-    const hotels = await prisma.etablissement.findMany();
+    const hotels = await prisma.hotel.findMany();
     console.log(hotels);
     return hotels;
   } catch (error) {
@@ -23,8 +23,8 @@ export default async function HotelsPage() {
       {hotels.length > 0 ? (
         <ul>
           {hotels.map((hotel) => (
-            <li key={hotel.id_etablissement}>
-              <h2>{hotel.nom}</h2>
+            <li key={hotel.id_hotel}>
+              <h2>{hotel.name}</h2>
               <p>{hotel.description}</p>
               <p>Lieu : {hotel.adresse}</p>
               {/* <p>Prix : {hotel.} €</p> */}
