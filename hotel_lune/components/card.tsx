@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface CardProps {
   id: number;
@@ -9,14 +10,16 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ id, name, description, adresse }) => {
+  const defaultImage = "/img/hotel_stockphoto.jpg";
   return (
     <div className="card card-compact bg-base-100 w-96 shadow-xl">
       <figure>
-        {/* Puedes poner aquí una imagen estática o dejarla vacía */}
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp" // Imagen predeterminada
+        <Image
+          src={defaultImage}
           alt="Imagen de hotel"
-          className="object-cover h-48 w-full" // Asegúrate de que tenga el tamaño correcto
+          width={384} // Establece el ancho de la imagen
+          height={192} // Establece la altura de la imagen
+          className="object-cover" // Asegúrate de que tenga el tamaño correcto
         />
       </figure>
       <div className="card-body">
