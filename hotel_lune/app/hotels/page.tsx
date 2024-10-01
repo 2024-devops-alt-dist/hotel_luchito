@@ -1,5 +1,5 @@
-// app/hotels/page.tsx
 import { PrismaClient } from "@prisma/client";
+import Card from "../../components/card";
 
 const prisma = new PrismaClient();
 
@@ -18,22 +18,23 @@ export default async function HotelsPage() {
   const hotels = await getHotels();
 
   return (
-    <div>
-      <h1>Liste des Hôtels</h1>
-      {hotels.length > 0 ? (
-        <ul>
-          {hotels.map((hotel) => (
-            <li key={hotel.id_hotel}>
-              <h2>{hotel.name}</h2>
-              <p>{hotel.description}</p>
-              <p>Lieu : {hotel.adresse}</p>
-              {/* <p>Prix : {hotel.} €</p> */}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>Aucun hôtel trouvé.</p>
-      )}
+    <div className="flex flex-col items-center p-4">
+      <h1 className="text-3xl font-bold mb-4">Available hotels</h1>
+      <div className="flex flex-wrap justify-center gap-4">
+        {hotels.length > 0 ? (
+          hotels.map((hotel) => (
+            <Card
+              key={hotel.id_hotel}
+              id={hotel.id_hotel}
+              name={hotel.name || "Nom inconnu"} // Proporciona un valor por defecto
+              description={hotel.description || "Pas de description disponible"} // Proporciona un valor por defecto
+              adresse={hotel.adresse || "Adresse inconnue"} // Proporciona un valor por defecto
+            />
+          ))
+        ) : (
+          <p>No hotel found.</p>
+        )}
+      </div>
     </div>
   );
 }
