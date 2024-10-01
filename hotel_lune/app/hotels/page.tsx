@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 async function getHotels() {
   try {
     const hotels = await prisma.hotel.findMany();
-    console.log(hotels);
     return hotels;
   } catch (error) {
     console.error("Erreur lors de la récupération des hôtels :", error);
