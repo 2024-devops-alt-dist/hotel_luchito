@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Header = () => {
   return (
     <div className="navbar bg-base-100">
@@ -24,13 +26,14 @@ const Header = () => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a>Homepage</a>
+              <Link href="/">Homepage</Link> {/* Agregar enlace a Homepage */}
             </li>
             <li>
-              <a>Hotels</a>
+              <Link href="/hotels">Hotels list</Link>{" "}
+              {/* Enlace a Hotels list */}
             </li>
             <li>
-              <a>About</a>
+              <a>About us</a>
             </li>
           </ul>
         </div>
