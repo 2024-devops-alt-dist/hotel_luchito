@@ -14,77 +14,77 @@ datasource db {
 }
 
 model User {
-  id_user        Int             @id @default(autoincrement()) @map("id_user")
-  nom            String?         @map("nom")
-  prenom         String?         @map("prenom")
-  rol            String?         @map("rol")
-  email          String?         @map("email")
-  mot_de_passe   String?         @map("mot_de_passe")
-  etablissements Etablissement[]
-  contacts       Contact[]
-  reservations   Reservation[]
+  id_user      Int           @id @default(autoincrement()) @map("id_user")
+  name         String?       @map("name")
+  surname      String?       @map("surname")
+  rol          String?       @map("rol")
+  email        String?       @map("email")
+  password     String?       @map("password")
+  hotels       Hotel[]
+  contacts     Contact[]
+  reservations Reservation[]
 
   @@map("USERS")
 }
 
-model Etablissement {
-  id_etablissement Int       @id @default(autoincrement()) @map("id_etablissement")
-  nom              String?   @map("nom")
-  adresse          String?   @map("adresse")
-  ville            String?   @map("ville")
-  description      String?   @map("description")
-  users_id_user    Int       @map("USERS_id_user")
-  user             User      @relation(fields: [users_id_user], references: [id_user])
-  suites           Suite[]
-  contacts         Contact[]
+model Hotel {
+  id_hotel    Int       @id @default(autoincrement()) @map("id_hotel")
+  name        String?   @map("name")
+  adresse     String?   @map("adresse")
+  city        String?   @map("city")
+  description String?   @map("description")
+  id_user     Int       @map("id_user")
+  user        User      @relation(fields: [id_user], references: [id_user])
+  rooms       Room[]
+  contacts    Contact[]
 
-  @@map("ETABLISSEMENTS")
+  @@map("HOTELS")
 }
 
-model Suite {
-  id_suite         Int           @id @default(autoincrement()) @map("id_suite")
-  nom              String?       @map("nom")
-  img              String?       @map("img")
-  description      String?       @map("description")
-  prix             Decimal?      @map("prix")
-  img_galery       Json?         @map("img_galery")
-  id_etablissement Int           @map("id_etablissement")
-  etablissement    Etablissement @relation(fields: [id_etablissement], references: [id_etablissement])
-  reservations     Reservation[]
+model Room {
+  id_room      Int           @id @default(autoincrement()) @map("id_room")
+  name         String?       @map("name")
+  img          String?       @map("img")
+  description  String?       @map("description")
+  price        Decimal?      @map("price")
+  img_galery   Json?         @map("img_galery")
+  id_hotel     Int           @map("id_hotel")
+  hotel        Hotel         @relation(fields: [id_hotel], references: [id_hotel])
+  reservations Reservation[]
 
-  @@map("SUITES")
+  @@map("ROOMS")
 }
 
 model Contact {
-  id_contact       Int           @id @default(autoincrement()) @map("id_contact")
-  sujet            String?       @map("sujet")
-  message          String        @map("message")
-  email            String?       @map("email")
-  date_contact     DateTime      @default(now()) @map("date_contact")
-  id_user          Int           @map("id_user")
-  user             User          @relation(fields: [id_user], references: [id_user])
-  id_etablissement Int           @map("id_etablissement")
-  etablissement    Etablissement @relation(fields: [id_etablissement], references: [id_etablissement])
+  id_contact   Int      @id @default(autoincrement()) @map("id_contact")
+  sujet        String?  @map("sujet")
+  message      String   @map("message")
+  email        String?  @map("email")
+  contact_date DateTime @default(now()) @map("contact_date")
+  id_user      Int      @map("id_user")
+  user         User     @relation(fields: [id_user], references: [id_user])
+  id_hotel     Int      @map("id_hotel")
+  hotel        Hotel    @relation(fields: [id_hotel], references: [id_hotel])
 
   @@map("CONTACTS")
 }
 
 model Reservation {
-  users_id_user   Int                @map("USERS_id_user")
-  suites_id_suite Int                @map("SUITES_id_suite")
-  date_debut      DateTime?          @map("date_debut")
-  date_fin        DateTime?          @map("date_fin")
-  statut          ReservationStatut? @map("statut")
-  date_creation   DateTime?          @map("date_creation")
+  id_user       Int                @map("id_user")
+  id_room       Int                @map("id_room")
+  starting_date DateTime?          @map("starting_date")
+  finish_date   DateTime?          @map("finish_date")
+  status        ReservationStatut? @map("status")
+  creation_date DateTime?          @map("creation_date")
 
-  user  User  @relation(fields: [users_id_user], references: [id_user])
-  suite Suite @relation(fields: [suites_id_suite], references: [id_suite])
+  user User @relation(fields: [id_user], references: [id_user])
+  room Room @relation(fields: [id_room], references: [id_room])
 
-  @@id([users_id_user, suites_id_suite])
+  @@id([id_user, id_room])
   @@map("RESERVATIONS")
 }
 
 enum ReservationStatut {
-  confirmee
-  anulee
+  confirmed
+  cancelled
 }
