@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const Hero = () => {
@@ -16,7 +17,9 @@ const Hero = () => {
             Claro de Luna is a chain of well know hotels that offer a relaxing
             expierence with a nature approach
           </p>
-          <button className="btn btn-primary">Book a room now!</button>
+          <Link href="../hotels">
+            <button className="btn btn-primary">Book a room now!</button>
+          </Link>
         </div>
       </div>
     </div>
