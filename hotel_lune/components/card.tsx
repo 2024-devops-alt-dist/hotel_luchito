@@ -27,7 +27,7 @@ const Card: React.FC<CardProps> = ({ id, name, description, adresse }) => {
         <p>{description || "Pas de description disponible"}</p>
         <p>Location : {adresse || "Adresse inconnue"}</p>
         <div className="card-actions justify-end">
-          <Link href={`/reservations/${id}`}>
+          <Link href={`/hotels/${id}`}>
             <button className="btn btn-primary">Book a room now</button>
           </Link>
         </div>
